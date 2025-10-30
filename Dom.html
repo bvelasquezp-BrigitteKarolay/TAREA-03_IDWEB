@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lab DOM - Ejercicios 9 a 12</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f7f7f7; color:#222; padding:20px; }
+    section { background:white; padding:12px; margin-bottom:12px; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+    button{ padding:8px 12px; margin-top:8px; border-radius:6px; border:none; background:#ff8a00; color:white; cursor:pointer; }
+    .ejemplo { margin-top:10px; padding:10px; background:#fff4e6; border-radius:6px; border:1px solid #ffd8a8; }
+  </style>
+</head>
+<body>
+
+  <h1>DOM - Ejercicios 9,10,11,12</h1>
+
+  <!-- EJERCICIO 9 -->
+  <section>
+    <h2>Ejercicio 9</h2>
+    <p id="p1" class="par">Este es el primer parrafo (id = p1).</p>
+    <p class="par">Este es el segundo parrafo.</p>
+    <p class="par">Este es el tercer parrafo.</p>
+
+    <button onclick="ej9_selecciones()">Ejecutar Ejercicio 9 (selecciones)</button>
+
+    <div class="ejemplo">
+      <!-- SOLO ELEMENTOS PARA EL EJERCICIO; SALIDA EN CONSOLA -->
+      Elementos: 3 parrafos (uno con id="p1"), clase comun "par".
+    </div>
+  </section>
+
+  <!-- EJERCICIO 10 -->
+  <section>
+    <h2>Ejercicio 10</h2>
+    <h1 id="titulo-h1">Titulo original</h1>
+    <button onclick="ej10_modificarH1()">Ejecutar Ejercicio 10 (modificar H1)</button>
+    <div class="ejemplo">Se cambiara el texto de &lt;h1&gt; y se modificara color y tamano desde JS. Ver consola.</div>
+  </section>
+
+  <!-- EJERCICIO 11 -->
+  <section>
+    <h2>Ejercicio 11</h2>
+    <div id="contenedorLista" class="ejemplo">Aqui se creara la &lt;ul&gt; dinamicamente.</div>
+    <button onclick="ej11_lista()">Ejecutar Ejercicio 11 (crear/editar lista)</button>
+    <div class="ejemplo">Se creara una &lt;ul&gt; con 3 &lt;li&gt;, se agregara un cuarto y se eliminara el segundo. Ver consola.</div>
+  </section>
+
+  <!-- EJERCICIO 12 -->
+  <section>
+    <h2>Ejercicio 12</h2>
+    <div id="miContenedor" class="ejemplo">
+      <p>Hijo A</p>
+      <p>Hijo B</p>
+      <span>Hijo C</span>
+      Texto suelto
+    </div>
+    <button onclick="ej12_infoContenedor()">Ejecutar Ejercicio 12 (info contenedor)</button>
+    <div class="ejemplo">Se mostrara en consola: padre, primer hijo, ultimo hijo y lista de nodos hijos.</div>
+  </section>
+
+<script>
+/* EJERCICIO 9 */
+function ej9_selecciones() {
+  // PRIMER PARRAFO POR ID
+  const p1 = document.getElementById('p1');
+  console.log("EJ9 - PRIMER PARRAFO (getElementById):", p1);
+  console.log("EJ9 - PRIMER PARRAFO - TEXT:", p1 ? p1.textContent : null);
+
+  // TODOS LOS PARRAFOS POR ETIQUETA
+  const todosParrafos = document.getElementsByTagName('p');
+  console.log("EJ9 - TODOS LOS PARRAFOS (getElementsByTagName):", todosParrafos);
+  console.log("EJ9 - TOTAL PARRAFOS:", todosParrafos.length);
+  Array.from(todosParrafos).forEach((p, i) => console.log(`EJ9 - PARRAFO ${i+1}:`, p.textContent));
+
+  // TODOS LOS ELEMENTOS CON UNA CLASE COMUN
+  const clasePar = document.getElementsByClassName('par');
+  console.log("EJ9 - ELEMENTOS CON CLASE 'par' (getElementsByClassName):", clasePar);
+  console.log("EJ9 - TOTAL ELEMENTOS CON CLASE 'par':", clasePar.length);
+  Array.from(clasePar).forEach((el, i) => console.log(`EJ9 - ELEMENTO CLASE 'par' ${i+1}:`, el.textContent));
+}
+
+/* EJERCICIO 10 */
+function ej10_modificarH1() {
+  const h1 = document.querySelector('h1');
+  if (!h1) {
+    console.warn("EJ10 - NO SE ENCONTRO ELEMENTO H1");
+    return;
+  }
+  h1.textContent = "DOM modificado con JavaScript";
+  h1.style.color = "#d9480f";     
+  h1.style.fontSize = "2.2rem"; 
+  // MOSTRAR EN CONSOLA LOS CAMBIOS
+  console.log("EJ10 - H1 MODIFICADO:", h1);
+  console.log("EJ10 - NUEVO TEXTO:", h1.textContent);
+  console.log("EJ10 - ESTILOS APLICADOS:", { color: h1.style.color, fontSize: h1.style.fontSize });
+}
+
+/* EJERCICIO 11 */
+function ej11_lista() {
+  const cont = document.getElementById('contenedorLista');
+  if (!cont) {
+    console.warn("EJ11 - NO SE ENCONTRO CONTENEDOR");
+    return;
+  }
+
+  // LIMPIAR CONTENIDO PREVIO
+  cont.innerHTML = "";
+
+  // CREAR UL Y LOS 3 LI INICIALES
+  const ul = document.createElement('ul');
+  ul.id = "miUl";
+  for (let i = 1; i <= 3; i++) {
+    const li = document.createElement('li');
+    li.textContent = "Elemento " + i;
+    ul.appendChild(li);
+  }
+  cont.appendChild(ul);
+
+  console.log("EJ11 - UL CREADO CON 3 ELEMENTOS:", ul);
+
+  // AGREGAR CUARTO ELEMENTO
+  const li4 = document.createElement('li');
+  li4.textContent = "Elemento 4";
+  ul.appendChild(li4);
+  console.log("EJ11 - SE AGREGO EL CUARTO ELEMENTO:", li4.textContent);
+
+  // ELIMINAR EL SEGUNDO ELEMENTO (indice 1)
+  const segundo = ul.children[1];
+  if (segundo) {
+    ul.removeChild(segundo);
+    console.log("EJ11 - SE ELIMINO EL SEGUNDO ELEMENTO");
+  } else {
+    console.warn("EJ11 - NO EXISTIA SEGUNDO ELEMENTO PARA ELIMINAR");
+  }
+
+  // MOSTRAR LISTA FINAL EN CONSOLA
+  const items = Array.from(ul.children).map(n => n.textContent);
+  console.log("EJ11 - LISTA FINAL:", items);
+}
+
+/* EJERCICIO 12 */
+function ej12_infoContenedor() {
+  const cont = document.getElementById('miContenedor');
+  if (!cont) {
+    console.warn("EJ12 - NO SE ENCONTRO EL CONTENEDOR");
+    return;
+  }
+
+  const padre = cont.parentElement;
+  const primerHijo = cont.firstElementChild;
+  const ultimoHijo = cont.lastElementChild;
+  const nodosHijos = cont.childNodes; 
+
+  console.log("EJ12 - CONTENEDOR:", cont);
+  console.log("EJ12 - ELEMENTO PADRE:", padre);
+  console.log("EJ12 - PRIMER HIJO (elemento):", primerHijo);
+  console.log("EJ12 - ULTIMO HIJO (elemento):", ultimoHijo);
+  console.log("EJ12 - LISTA DE NODOS HIJOS (incluye texto):", nodosHijos);
+  console.log("EJ12 - TOTAL NODOS HIJOS:", nodosHijos.length);
+}
+</script>
+
+</body>
+</html>
